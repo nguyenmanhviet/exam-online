@@ -1,0 +1,113 @@
+body {
+    background: #F7F7F7;
+    display: grid;
+    font: 87.5%/1.5em 'Lato', sans-serif;
+    margin-top: 125px;
+    /* min-height: 80vh; */
+    place-items: center;
+  }
+   
+  .container {
+    margin-top: 20px;
+    width: 1200px;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+  }
+  
+  td {
+    padding: 0;
+  }
+  
+  .calendarcontainer {
+    position: relative;
+    width: 1200px;
+  }
+  
+  .calendarcontainer header {
+    border-radius: 1em 1em 0 0;
+    background: #354A5E;
+    color: #fff;
+    padding: 2em 1em;
+  }
+  
+  .day {
+    font-size: 4em;
+    font-weight: 900;
+    line-height: 0.5em;
+  }
+  
+  .month {
+    font-size: 4em;
+    line-height: 1em;
+    text-transform: lowercase;
+  }
+  
+  .calendar {
+    background: #fff;
+    border-radius: 0 0 1em 1em;
+    -webkit-box-shadow: 0 2px 1px rgba(0, 0, 0, .2), 0 3px 1px #fff;
+    box-shadow: 0 2px 1px rgba(0, 0, 0, .2), 0 3px 1px #fff;
+    color: #555;
+    display: inline-block;
+    padding: 2em;
+  }
+  
+  .calendar thead {
+    color: #354A5E;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  
+  .calendar td {
+    padding: .5em 1em;
+    text-align: center;
+    width: 140px;
+    height: 90px;
+  }
+  
+  .calendar tbody td:hover {
+    background: #cacaca;
+    color: #fff;
+  }
+  
+  .calendar thead td {
+    padding: 0em 1em;
+    height: 40px;
+  }
+
+  .currentday {
+    color: #354A5E;
+  }
+  
+  .prevmonth,
+  .nextmonth {
+    color: #cacaca;
+  }
+  
+  .ringleft,
+  .ringright {
+    position: absolute;
+    top: 110px;
+  }
+  
+  .ringleft { left: 2em; }
+  .ringright { right: 2em; }
+  
+  .ringleft:before,
+  .ringleft:after,
+  .ringright:before,
+  .ringright:after {
+    background: #fff;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 3px 1px rgba(0, 0, 0, .3), 0 -1px 1px rgba(0, 0, 0, .2);
+    box-shadow: 0 3px 1px rgba(0, 0, 0, .3), 0 -1px 1px rgba(0, 0, 0, .2);
+    content: "";
+    display: inline-block;
+    margin: 8px;
+    height: 32px;
+    width: 8px;
+  }
