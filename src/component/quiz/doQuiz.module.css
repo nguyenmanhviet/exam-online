@@ -1,0 +1,81 @@
+.container {
+    width: 1600px;
+    display: flex;
+    color: rgb(37, 79, 115);
+    font-size: 15px;
+}
+
+.containerQuiz {
+  padding: 1rem 1rem;
+  padding-bottom: 1em;
+  margin: 1rem;
+  border-radius: 5px;
+  background: #F7F7F7;
+  width: 60%;
+  height: 740px;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+}
+
+.informationCamera {
+    width: 35%;
+}
+
+.informationQuiz {
+    width: 90%;
+    padding: 0.2rem 1rem;
+    margin: 1em 0px;
+  padding-bottom: 1em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.checkBox {
+    margin: 0;
+}
+
+.quiz {
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #ccc;
+    margin-bottom: 10px;
+}
+
+.itemNo {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.mainRow {
+    margin-bottom: 10px;
+}
+
+.wrapperQuestion {
+    line-height: 1.5em;
+}
+
+.question {
+    margin: 0;
+}
+
+.dapAn {
+    line-height: 1.5em;
+    margin-left: 15px;
+}
+
+.tickBox {
+    margin-right: 10px
+}
+
+.answerCheck {
+    margin: 10px 0px;
+    text-align: left;
+}
+
+.checkAnswer {
+    border: 1px solid #ccc;
+    margin: 3px 3px;
+    padding: 5px 10px;
+    width: 40px;
+    cursor: pointer;
+    color: white;
+    background-color: #6DA0CB;
+}

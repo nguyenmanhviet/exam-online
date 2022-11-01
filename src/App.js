@@ -10,16 +10,47 @@ import "./App.css";
 import ClassSubject from "./component/class-subject/classSubject";
 import ModalQuiz from "./component/modal/ModalQuiz";
 import QuizHistory from "./component/quiz/QuizHistory";
+import CameraFaceRecognition from "./component/AI/CameraFaceRecognition";
+import DoQuiz from "./component/quiz/doQuiz";
+import DoneQuiz from "./component/quiz/DoneQuiz";
+import Subject from "./component/subject/subject";
+import ModalAddSubject from "./component/modal/ModalAddSubject";
+import ModalEditSubject from "./component/modal/ModalEditSubject";
+import ClassSubjectManagement from "./component/subject/ClassSubjectManagement";
 
 function App() {
   const [isDetailClassSubject, setDetailClassSubject] = useState(false);
   const [isModalQuiz, setModalQuiz] = useState(false);
+  const [isModalAddSubject, setModalAddSubject] = useState(false);
+  const [isModalEditSubject, setModalEditSubject] = useState(false);
   const [isBackdrop, setBackdrop] = useState(false);
 
   const onBackdropHandler = () => {
     setBackdrop(false);
     setDetailClassSubject(false);
     setModalQuiz(false);
+    setModalAddSubject(false);
+    setModalEditSubject(false)
+  };
+
+  const onActiveModalEditSubject = () => {
+    setBackdrop(true);
+    setModalEditSubject(true);
+  };
+
+  const onExitModalEditSubject = () => {
+    setModalEditSubject(false);
+    setBackdrop(false);
+  };
+
+  const onActiveModalAddSubject = () => {
+    setBackdrop(true);
+    setModalAddSubject(true);
+  };
+
+  const onExitModalAddSubject = () => {
+    setModalAddSubject(false);
+    setBackdrop(false);
   };
 
   const onActiveModalQuiz = () => {
@@ -51,6 +82,12 @@ function App() {
         />
       )}
       {isModalQuiz && <ModalQuiz onExitModalQuiz={onExitModalQuiz} />}
+      {isModalAddSubject && (
+        <ModalAddSubject onExitModalAddSubject={onExitModalAddSubject} />
+      )}
+      {isModalEditSubject && (
+        <ModalEditSubject onExitModalEditSubject={onExitModalEditSubject} />
+      )}
       <Layout>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -68,10 +105,21 @@ function App() {
             element={<Quiz onActiveModalQuiz={onActiveModalQuiz} />}
           />
 
+          <Route path="/quiz-history" element={<QuizHistory />} />
           <Route
-            path="/quiz-history"
-            element={<QuizHistory/>}
+            path="/camera-recognition"
+            element={<CameraFaceRecognition />}
           />
+          <Route path="/do-quiz" element={<DoQuiz />} />
+          <Route path="/done-quiz" element={<DoneQuiz />} />
+
+          <Route
+            path="/subject-management"
+            element={
+              <Subject onActiveModalAddSubject={onActiveModalAddSubject} onActiveModalEditSubject={onActiveModalEditSubject} />
+            }
+          />
+          <Route path="/class-subject-management" element={<ClassSubjectManagement />}/>
         </Routes>
       </Layout>
     </Fragment>

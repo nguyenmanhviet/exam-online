@@ -1,0 +1,22 @@
+.time {
+    text-align: center;
+    font-size: 25px;
+    color: red
+}
+
+.detaile {
+    text-align: center !important;
+  }
+
+  .detaile button {
+    background-color: #6DA0CB;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 15px;
+    color: white;
+    cursor: pointer;
+  }
+
+ .detaile button:hover {
+    background-color: #254F73;
+ }

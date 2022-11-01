@@ -3,6 +3,7 @@ import classes from "./MainNavigation.module.css";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/authContext";
+import { IoIosContact } from "react-icons/io";
 
 const MainNavigation = (props) => {
   const authCtx = useContext(AuthContext);
@@ -29,7 +30,14 @@ const MainNavigation = (props) => {
         </Link>
         {authCtx.isLoggedIn && (
           <div className={classes.dropdown}>
-            <button onMouseOver={handleOpen}>Dropdown</button>
+            <img
+              className={classes.logoImage}
+              src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+              alt="Roomless"
+            ></img>
+            <button onClick={handleOpen} className={classes.user}>
+              Xin chào, 102180054
+            </button>
             {open ? (
               <ul className={classes.menu}>
                 <li className={classes.menuItem}>
@@ -43,7 +51,7 @@ const MainNavigation = (props) => {
           </div>
         )}
       </div>
-      {authCtx.isLoggedIn && (
+      {/* {authCtx.isLoggedIn && (
         <nav className={classes.nav}>
           <ul>
             <li>
@@ -64,6 +72,40 @@ const MainNavigation = (props) => {
             <li>
               <NavLink to="/quiz-history" activeClassName={classes.active}>
                 Lịch sử làm bài
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/quotes" activeClassName={classes.active}>
+                Bài tập
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      )} */}
+      {authCtx.isLoggedIn && (
+        <nav className={classes.nav}>
+          <ul>
+            <li>
+              <NavLink to="/home" activeClassName={classes.active}>
+                Trang chủ
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/subject-management"
+                activeClassName={classes.active}
+              >
+                Quản lý học phần
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/class-subject-management" activeClassName={classes.active}>
+                Quản lý lớp học phần
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/exam" activeClassName={classes.active}>
+                Quản lý kiểm tra
               </NavLink>
             </li>
             <li>

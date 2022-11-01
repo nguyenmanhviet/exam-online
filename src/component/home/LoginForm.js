@@ -1,6 +1,6 @@
 import classes from "./LoginForm.module.css";
-import { useRef, useContext } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useRef, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/authContext";
 
 const token =
@@ -12,15 +12,18 @@ const LoginForm = (props) => {
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
 
+  useEffect(() => {
+    navigate('/home')
+  });
+
   const submitHandle = (event) => {
     event.preventDefault();
 
-    
     const enteredMssv = mssvInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
     const expirationTime = new Date(new Date().getTime() + 36000000 * 1000);
     authCtx.login("1", token, expirationTime.toISOString());
-    navigate('/home');
+    navigate("/home");
   };
   return (
     <div className={classes.login}>

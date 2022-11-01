@@ -1,0 +1,234 @@
+.search {
+    margin: 0;
+    width: 1200px;
+    position: relative;
+}
+
+
+.addSubject {
+    background-color: rgb(81, 159, 81);
+    border: none;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: -10px;
+    padding: 10px 15px
+  }
+
+ .addSubject:hover {
+    background-color: rgb(42, 95, 42);
+ }
+
+.search p {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    color: #7C95AC;
+    font-size: 20px;
+}
+
+.control {
+    display: inline-block;
+    margin-right: 20px;
+    margin-top: 10px;
+}
+
+.control label {
+    font-weight: bold;
+    color:  #7C95AC;
+}
+
+.control input{
+    display: block;
+    color: #7C95AC;
+    padding: 8px 10px;
+    border: 1px solid #efefef;
+    border-radius: 10px;
+}
+
+.control input, select:focus {
+    outline-color: rgb(187, 235, 235);
+  } 
+    
+  .noidung{
+    display: block;
+    color: #7C95AC;
+    width: 1150px;
+    padding: 8px 10px;
+    border: 1px solid #efefef;
+    border-radius: 10px;
+}
+
+.actions {
+    margin-top: 10px;
+}
+
+  .actions button {
+    background-color: #6DA0CB;
+    outline: none;
+    transition-duration: 0.2s !important;
+    transition-timing-function: ease-out !important;
+    position: relative !important;
+    display: inline-block !important;
+    text-align: center !important;
+    letter-spacing: normal !important;
+    padding: 7px 15px !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    border-radius: 8px !important;
+    border: 2px solid rgba(0, 0, 0, 0) !important;
+  }
+  
+  .actions button:hover {
+    background-color: #254F73;
+  }
+
+  .show {
+    display: inline;
+    width: 70px;
+    margin-left: 10px;
+  }
+
+  .wrapper {
+    display: block;
+    margin: 5px auto;
+  }
+  
+  .keywords {
+    margin: 0 auto;
+    margin-bottom: 15px;
+  }
+  
+  
+  .keywords thead {
+    cursor: pointer;
+    background: #c9dff0;
+  }
+  .keywords thead tr th { 
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    background-color: rgb(37, 79, 115);
+  }
+  .keywords thead tr th span { 
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+  }
+  
+  .keywords thead tr th.headerSortUp, .keywords thead tr th.headerSortDown {
+    background: #acc8dd;
+  }
+  
+  .keywords thead tr th.headerSortUp span {
+    background-image: url('https://i.imgur.com/SP99ZPJ.png');
+  }
+  .keywords thead tr th.headerSortDown span {
+    background-image: url('https://i.imgur.com/RkA9MBo.png');
+  }
+  
+  
+  .keywords tbody tr { 
+    color: #7C95AC;
+  }
+  .keywords tbody tr td {
+    padding: 2px;
+    padding-left: 5px;
+    text-align: left
+  }
+
+  table, th, td {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+  }
+
+  .detaile {
+    text-align: center !important;
+  }
+
+  .detaile button {
+    background-color: #6DA0CB;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+  }
+
+ .detaile button:hover {
+    background-color: #254F73;
+ }
+
+ .delete {
+    text-align: center !important;
+  }
+
+  .delete button {
+    background-color: rgb(215, 80, 80);
+    border: none;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+  }
+
+ .delete button:hover {
+    background-color: rgb(137, 49, 49);
+ }
+
+  .container {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  
+ 
+  .pagination {
+    margin: 15px 0 15px 0;
+  }
+  .pagination,
+  .pagination li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .pagination li {
+    background: #ccc;
+    list-style: none;
+  }
+  .pagination li {
+    color: #fdfdfd;
+    height: 30px;
+    width: 30px;
+    padding-top: 1px;
+    border-right-width: 0px;
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.35);
+  }
+  .pagination li:last-child {
+    border-right-width: 1px;
+  }
+  .pagination li:hover {
+    color: #ccc;
+    background: rgba(255, 255, 255, 0.2);
+    border-top-color: rgba(0, 0, 0, 0.35);
+    border-bottom-color: rgba(0, 0, 0, 0.5);
+  }
+  .pagination li:focus,
+  .pagination li:active {
+    padding-top: 4px;
+    border-left-width: 1px;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0px 2px 1px 0px rgba(0, 0, 0, 0.25);
+  }
+  .pagination li.icon {
+    min-width: 60px;
+  }
+  .pagination li:first-child span {
+    padding-right: 8px;
+  }
+  .pagination li:last-child span {
+    padding-left: 8px;
+  }

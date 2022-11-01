@@ -1,7 +1,7 @@
 .modal {
     position: fixed;
-    width: 30%;
-    left: 35%;
+    width: 40%;
+    left: 30%;
     margin: 0 auto;
     top: 6vh;
     background: white;
@@ -128,9 +128,7 @@
     font-weight: bold;
     color: rgb(37, 79, 115) !important;
     font-size: 15px !important;
-    padding: 2px !important;
-    border: none !important;
-    margin: 0 !important;
+    padding: 2px !important
   }
   
   
@@ -140,7 +138,7 @@
     display: flex;
   }
   .actions .btnHolder {
-    justify-content: flex-start;
+    justify-content: flex-end;
     display: flex;
   }
   
@@ -169,25 +167,83 @@
     background-color: #A92825;
   }
 
-  .inputCode {
-    display: block;
-    color: #7C95AC;
-    width: 95%;
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-  }
+  .search {
+    margin: 0;
+    width: 100%;
+    position: relative;
+}
 
 
-  .doQuiz {
-    background-color: #6DA0CB !important;
+.addSubject {
+    background-color: rgb(81, 159, 81);
     border: none;
     border-radius: 3px;
-    padding: 5px;
     color: white;
     cursor: pointer;
-    margin-right: 10px !important;
+    position: absolute;
+    right: 0;
+    top: -10px;
+    padding: 10px 15px
   }
 
- .doQuiz:hover {
-    background-color: #254F73 !important;
+ .addSubject:hover {
+    background-color: rgb(42, 95, 42);
  }
+
+.search p {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    color: #7C95AC;
+    font-size: 20px;
+}
+
+.control {
+    display: inline-block;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+.control label {
+    font-weight: bold;
+    color:  #7C95AC;
+}
+
+.control input{
+    display: block;
+    color: #7C95AC;
+    width: 620px;
+    padding: 8px 10px;
+    border: 1px solid #efefef;
+    border-radius: 10px;
+}
+
+.control input, select:focus {
+    outline-color: rgb(187, 235, 235);
+  } 
+    
+.add {
+    margin-top: 10px;
+    margin: 0 auto;
+}
+
+  .add button {
+    background-color: #6DA0CB;
+    outline: none;
+    transition-duration: 0.2s !important;
+    transition-timing-function: ease-out !important;
+    position: relative !important;
+    text-align: center !important;
+    letter-spacing: normal !important;
+    padding: 7px 15px !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    border-radius: 8px !important;
+    border: 2px solid rgba(0, 0, 0, 0) !important;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .add button:hover {
+    background-color: #254F73;
+  }
