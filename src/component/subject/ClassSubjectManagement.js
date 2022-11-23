@@ -1,16 +1,145 @@
 import classes from "./ClassSubjectManagement.module.css";
 import Card from "../UI/Card";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import { IoIosEye, IoIosCloseCircle } from "react-icons/io";
 
 const ClassSubjectManagement = (props) => {
-  const hanldeModalAddSubject = () => {
-    props.onActiveModalAddSubject();
+  const [classSubjects, setClassSubjects] = useState([]);
+  const [semesters, setSemesters] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [years, setYears] = useState([]);
+  const [payload, setPayload] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState([]);
+  const searchContent = useRef();
+
+  const handleChangePage = (page) => {
+    let headers = new Headers();
+
+    headers.append("Content-Type", "application/json");
+    headers.append("Accept", "application/json");
+
+    headers.append("Access-Control-Allow-Origin", "http://3.105.183.164:3001");
+    headers.append("Access-Control-Allow-Credentials", "true");
+    fetch(
+      `http://3.105.183.164:3001/classSubject?page=${page}&q=${
+        searchContent.current.value
+      }&subjectId=${payload.subjectId ?? ""}&semesterId=${
+        payload.semesterId ?? ""
+      }&yearId=${payload.yearId ?? ""}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setCurrentPage(page);
+        setClassSubjects(data.items);
+      })
+      .catch((err) => console.log(err));
   };
 
-  const handleEdit = () => {
-    props.onActiveModalEditSubject();
+  const handleSearch = (event) => {
+    event.preventDefault();
+    let headers = new Headers();
+
+    headers.append("Content-Type", "application/json");
+    headers.append("Accept", "application/json");
+
+    headers.append("Access-Control-Allow-Origin", "http://3.105.183.164:3001");
+    headers.append("Access-Control-Allow-Credentials", "true");
+    fetch(
+      `http://3.105.183.164:3001/classSubject?q=${
+        searchContent.current.value
+      }&subjectId=${payload.subjectId ?? ""}&semesterId=${
+        payload.semesterId ?? ""
+      }&yearId=${payload.yearId ?? ""}`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const arr = [];
+        for (let i = 1; i <= data.meta.totalPages; i = i + 1) {
+          console.log(i);
+          arr.push(i);
+        }
+        setTotalPages(arr);
+        setClassSubjects(data.items);
+      })
+      .catch((err) => console.log(err));
   };
+
+  const hanldeModalAddSubject = () => {
+    props.onActiveModalAddClassSubject();
+  };
+
+  useEffect(() => {
+    let headers = new Headers();
+
+    headers.append("Content-Type", "application/json");
+    headers.append("Accept", "application/json");
+
+    headers.append("Access-Control-Allow-Origin", "http://3.105.183.164:3001");
+    headers.append("Access-Control-Allow-Credentials", "true");
+    fetch(`http://3.105.183.164:3001/classSubject`, {
+      method: "GET",
+      headers: headers,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const arr = [];
+        for (let i = 1; i <= data.meta.totalPages; i = i + 1) {
+          console.log(i);
+          arr.push(i);
+        }
+        setTotalPages(arr);
+        setClassSubjects(data.items);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    let headers = new Headers();
+
+    headers.append("Content-Type", "application/json");
+    headers.append("Accept", "application/json");
+
+    headers.append("Access-Control-Allow-Origin", "http://3.105.183.164:3001");
+    headers.append("Access-Control-Allow-Credentials", "true");
+    fetch(`http://3.105.183.164:3001/year`, {
+      method: "GET",
+      headers: headers,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setYears(data);
+      })
+      .catch((err) => console.log(err));
+
+    fetch(`http://3.105.183.164:3001/semester`, {
+      method: "GET",
+      headers: headers,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSemesters(data);
+      })
+      .catch((err) => console.log(err));
+
+    fetch(`http://3.105.183.164:3001/subject`, {
+      method: "GET",
+      headers: headers,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSubjects(data.items);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <Fragment>
@@ -22,25 +151,57 @@ const ClassSubjectManagement = (props) => {
               <div className={classes.searching}>
                 <div className={classes.control}>
                   <label htmlFor="username">Năm học</label>
-                  <select name="year">
-                    <option value="all" selected>
-                      Tất cả
-                    </option>
-                    <option value="">2021-2022</option>
+                  <select
+                    name="year"
+                    onChange={(event) => {
+                      setPayload((payload) => ({
+                        ...payload,
+                        yearId: event.target.value,
+                      }));
+                    }}
+                  >
+                    <option value={""}>Tất cả</option>
+                    {years &&
+                      years.map((year) => (
+                        <option value={year.id}>{year.namHoc}</option>
+                      ))}
                   </select>
                 </div>
                 <div className={classes.control}>
                   <label htmlFor="password">Học kỳ</label>
-                  <select name="year">
-                    <option value="all" selected>
-                      Tất cả
-                    </option>
-                    <option value="">Học kỳ 2</option>
+                  <select
+                    name="semester"
+                    onChange={(event) => {
+                      setPayload((payload) => ({
+                        ...payload,
+                        semesterId: event.target.value,
+                      }));
+                    }}
+                  >
+                    <option value={""}>Tất cả</option>
+                    {semesters &&
+                      semesters.map((semester) => (
+                        <option value={semester.id}>{semester.hocKy}</option>
+                      ))}
                   </select>
                 </div>
                 <div className={classes.control}>
                   <label htmlFor="password">Học phần</label>
-                  <input className={classes.hocphan} />
+                  <select
+                    name="subject"
+                    onChange={(event) => {
+                      setPayload((payload) => ({
+                        ...payload,
+                        subjectId: event.target.value,
+                      }));
+                    }}
+                  >
+                    <option value={""}>Tất cả</option>
+                    {subjects &&
+                      subjects.map((subject) => (
+                        <option value={subject.id}>{subject.hocPhan}</option>
+                      ))}
+                  </select>
                 </div>
                 <div className={classes.control}>
                   <label htmlFor="username">Nội dung</label>
@@ -48,11 +209,14 @@ const ClassSubjectManagement = (props) => {
                     className={classes.noidung}
                     type="text"
                     placeholder="Học phần"
+                    ref={searchContent}
                   />
                 </div>
               </div>
               <div className={classes.actions}>
-                <button className="btn">Tìm kiếm</button>
+                <button className="btn" onClick={handleSearch}>
+                  Tìm kiếm
+                </button>
               </div>
             </form>
           </div>
@@ -110,6 +274,9 @@ const ClassSubjectManagement = (props) => {
                     <span>Học kỳ</span>
                   </th>
                   <th>
+                    <span>Sinh viên</span>
+                  </th>
+                  <th>
                     <span>Sửa</span>
                   </th>
                   <th>
@@ -118,102 +285,61 @@ const ClassSubjectManagement = (props) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className={classes.lalign}>18Nh11A</td>
-                  <td>Phân tích thiết kế hướng đối tượng</td>
-                  <td>7131278Hn1298AQW</td>
-                  <td>Đặng Hoài Phương</td>
-                  <td>2022-2023</td>
-                  <td>Học kỳ 1</td>
-                  <td className={classes.detaile} onClick={handleEdit}>
-                    <button>
-                      <IoIosEye />
-                    </button>
-                  </td>
-                  <td className={classes.delete}>
-                    <button>
-                      <IoIosCloseCircle />
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td className={classes.lalign}>18Nh11A</td>
-                  <td>Phân tích thiết kế hướng đối tượng</td>
-                  <td>7131278Hn1298AQW</td>
-                  <td>Đặng Hoài Phương</td>
-                  <td>2022-2023</td>
-                  <td>Học kỳ 1</td>
-                  <td className={classes.detaile} onClick={handleEdit}>
-                    <button>
-                      <IoIosEye />
-                    </button>
-                  </td>
-                  <td className={classes.delete}>
-                    <button>
-                      <IoIosCloseCircle />
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td className={classes.lalign}>18Nh11A</td>
-                  <td>Phân tích thiết kế hướng đối tượng</td>
-                  <td>7131278Hn1298AQW</td>
-                  <td>Đặng Hoài Phương</td>
-                  <td>2022-2023</td>
-                  <td>Học kỳ 1</td>
-                  <td className={classes.detaile} onClick={handleEdit}>
-                    <button>
-                      <IoIosEye />
-                    </button>
-                  </td>
-                  <td className={classes.delete}>
-                    <button>
-                      <IoIosCloseCircle />
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td className={classes.lalign}>18Nh11A</td>
-                  <td>Phân tích thiết kế hướng đối tượng</td>
-                  <td>7131278Hn1298AQW</td>
-                  <td>Đặng Hoài Phương</td>
-                  <td>2022-2023</td>
-                  <td>Học kỳ 1</td>
-                  <td className={classes.detaile} onClick={handleEdit}>
-                    <button>
-                      <IoIosEye />
-                    </button>
-                  </td>
-                  <td className={classes.delete}>
-                    <button>
-                      <IoIosCloseCircle />
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td className={classes.lalign}>18Nh11A</td>
-                  <td>Phân tích thiết kế hướng đối tượng</td>
-                  <td>7131278Hn1298AQW</td>
-                  <td>Đặng Hoài Phương</td>
-                  <td>2022-2023</td>
-                  <td>Học kỳ 1</td>
-                  <td className={classes.detaile} onClick={handleEdit}>
-                    <button>
-                      <IoIosEye />
-                    </button>
-                  </td>
-                  <td className={classes.delete}>
-                    <button>
-                      <IoIosCloseCircle />
-                    </button>
-                  </td>
-                </tr>
+                {classSubjects &&
+                  classSubjects.map((classSubject) => (
+                    <tr>
+                      <td className={classes.lalign}>{classSubject.tenLop}</td>
+                      <td>{classSubject.hocPhan.hocPhan}</td>
+                      <td>{classSubject.maLop}</td>
+                      <td>{classSubject.giangVien.hoTen}</td>
+                      <td>{classSubject.namHoc.namHoc}</td>
+                      <td>{classSubject.hocKy.hocKy}</td>
+                      <td
+                        className={classes.detaile}
+                        onClick={() => {
+                          props.onActiveModalListStudent(classSubject);
+                        }}
+                      >
+                        <button>
+                          <IoIosEye />
+                        </button>
+                      </td>
+                      <td
+                        className={classes.detaile}
+                        onClick={() => {
+                          props.onActiveModalEditClassSubject(classSubject);
+                        }}
+                      >
+                        <button>
+                          <IoIosEye />
+                        </button>
+                      </td>
+                      <td className={classes.delete}>
+                        <button>
+                          <IoIosCloseCircle />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
             <div className={classes.container}>
               <ul className={classes.pagination}>
                 <li className={classes.icon}>Pre</li>
-                <li>1</li>
+                {totalPages &&
+                  totalPages.map((page) => (
+                    <li
+                      onClick={() => {
+                        handleChangePage(page);
+                      }}
+                      style={{
+                        backgroundColor:
+                          page == currentPage ? "rgb(37, 79, 115)" : "#ccc",
+                      }}
+                    >
+                      {page}
+                    </li>
+                  ))}
                 <li className={classes.icon}>Next</li>
               </ul>
             </div>

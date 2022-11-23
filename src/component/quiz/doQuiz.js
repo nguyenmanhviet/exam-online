@@ -1,507 +1,145 @@
-import React from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import CameraDetection from "../AI/CameraDetection";
 import classes from "./doQuiz.module.css";
 import InformationQuiz from "./InformationQuiz";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../../store/authContext";
 
 const DoQuiz = (props) => {
-  var foo = [];
+  const navigate = useNavigate();
+  const query = matchMedia("all and (display-mode: fullscreen");
+  const [cauHoiList, setCauHoiList] = useState([]);
+  const [result, setResult] = useState({});
+  const wrapperRef = useRef(null);
+  const labelDapAn = ["A", "B", "C", "D", "E", "F"];
+  const [loiViPham, setLoiViPham] = useState(0);
+  const [lopHocPhan, setLopHocPhan] = useState({ tenLop: "" });
+  const [isTurnOffCam, setIsTurnOffCam] = useState(false);
+  const authCtx = useContext(AuthContext);
 
-  for (var i = 1; i <= 40; i++) {
-    foo.push(i);
+  // query.onchange = (e) => {
+  //   if (!query.matches) {
+  //     navigate("/home");
+  //   }
+  // };
+
+  // if (!props.kyThi) {
+  //   console.log("chay qua ma");
+  //   navigate("/home");
+  // }
+
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+      /**
+       * Alert if clicked on outside of element
+       */
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setLoiViPham((loiViPham) => loiViPham + 1);
+        }
+      }
+      // Bind the event listener
+      document.addEventListener("mouseout", handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener("mouseout", handleClickOutside);
+      };
+    }, [ref]);
   }
+
+  useOutsideAlerter(wrapperRef);
+
+  useEffect(() => {
+    fetch("http://3.105.183.164:3001/sv/kythi/cauhoi", {
+      method: "POST",
+      body: JSON.stringify({
+        hocPhanId: props.kyThi.hocPhanId,
+        soLuongCauHoi: props.kyThi.soCauHoi,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setCauHoiList(data);
+      });
+  }, []);
+
   return (
-    <div className={classes.container}>
+    <div className={classes.container} ref={wrapperRef}>
       <div className={classes.containerQuiz}>
         <div className={classes.answerCheck}>
-          {foo &&
-            foo.map((number) => (
-              <button className={classes.checkAnswer}>{number}</button>
+          {cauHoiList &&
+            cauHoiList.map((cauHoi, idx) => (
+              <button
+                className={classes.checkAnswer}
+                style={{
+                  backgroundColor: Object.keys(result).includes(
+                    cauHoi.id.toString()
+                  )
+                    ? "green"
+                    : "#6DA0CB",
+                }}
+              >
+                {idx + 1}
+              </button>
             ))}
-          {/* <div className={classes.checkAnswer}>1</div>
-          <div className={classes.checkAnswer}>1</div>
-          <div className={classes.checkAnswer}>1</div>
-          <div className={classes.checkAnswer}>1</div>
-          <div className={classes.checkAnswer}>1</div>
-          <div className={classes.checkAnswer}>1</div>
-          <div className={classes.checkAnswer}>1</div>
-          <div className={classes.checkAnswer}>1</div> */}
         </div>
-
-        <div className={classes.quiz}>
-          <div className={classes.itemNo}>Câu 1:</div>
-          <div className={classes.mainRow}>
-            <div className={classes.wrapperQuestion}>
-              <p className={classes.question}>
-                Which of the following is/are White box technique?
-              </p>
+        {cauHoiList &&
+          cauHoiList.map((cauHoi, idx) => (
+            <div className={classes.quiz}>
+              <div className={classes.itemNo}>Câu {idx + 1}:</div>
+              <div className={classes.mainRow}>
+                <div className={classes.wrapperQuestion}>
+                  <p className={classes.question}>{cauHoi.cauHoi}</p>
+                </div>
+              </div>
+              <form>
+                {cauHoi.dapAn &&
+                  cauHoi.dapAn.map((dapAn, idx) => (
+                    <div className={classes.row}>
+                      <div className={classes.dapAn}>
+                        <input
+                          type="radio"
+                          className={classes.tickBox}
+                          name={`${dapAn.cauHoiId}`}
+                          value={dapAn.id}
+                          onChange={() => {
+                            setResult((result) => ({
+                              ...result,
+                              [dapAn.cauHoiId]: dapAn.id,
+                            }));
+                          }}
+                        />
+                        <label for="vehicle1">
+                          <b>{labelDapAn[idx]}. </b> {dapAn.dapAn}
+                        </label>
+                        <br />
+                      </div>
+                    </div>
+                  ))}
+              </form>
             </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div class="row datext-an-dung">
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-        </div>
-
-        <div className={classes.quiz}>
-          <div className={classes.itemNo}>Câu 1:</div>
-          <div className={classes.mainRow}>
-            <div className={classes.wrapperQuestion}>
-              <p className={classes.question}>
-                Which of the following is/are White box technique?
-              </p>
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div class="row datext-an-dung">
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-        </div>
-
-        <div className={classes.quiz}>
-          <div className={classes.itemNo}>Câu 1:</div>
-          <div className={classes.mainRow}>
-            <div className={classes.wrapperQuestion}>
-              <p className={classes.question}>
-                Which of the following is/are White box technique?
-              </p>
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div class="row datext-an-dung">
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-        </div>
-
-        <div className={classes.quiz}>
-          <div className={classes.itemNo}>Câu 1:</div>
-          <div className={classes.mainRow}>
-            <div className={classes.wrapperQuestion}>
-              <p className={classes.question}>
-                Which of the following is/are White box technique?
-              </p>
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div class="row datext-an-dung">
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-        </div>
-
-        <div className={classes.quiz}>
-          <div className={classes.itemNo}>Câu 1:</div>
-          <div className={classes.mainRow}>
-            <div className={classes.wrapperQuestion}>
-              <p className={classes.question}>
-                Which of the following is/are White box technique?
-              </p>
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div class="row datext-an-dung">
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-        </div>
-
-        <div className={classes.quiz}>
-          <div className={classes.itemNo}>Câu 1:</div>
-          <div className={classes.mainRow}>
-            <div className={classes.wrapperQuestion}>
-              <p className={classes.question}>
-                Which of the following is/are White box technique?
-              </p>
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div class="row datext-an-dung">
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-        </div>
-
-        <div className={classes.quiz}>
-          <div className={classes.itemNo}>Câu 1:</div>
-          <div className={classes.mainRow}>
-            <div className={classes.wrapperQuestion}>
-              <p className={classes.question}>
-                Which of the following is/are White box technique?
-              </p>
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div className={classes.row}>
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-          <div class="row datext-an-dung">
-            <div className={classes.dapAn}>
-              <input
-                type="radio"
-                className={classes.tickBox}
-                name="vehicle1"
-                value="Bike"
-              />
-              <label for="vehicle1">
-                <b>A. </b> I have a bike
-              </label>
-              <br />
-            </div>
-          </div>
-        </div>
+          ))}
       </div>
       <div className={classes.informationCamera}>
         <div className={classes.informationQuiz}>
-          <InformationQuiz />
+          <InformationQuiz
+            kyThi={props.kyThi}
+            result={result}
+            setKetQua={props.setKetQua}
+            loiViPham={loiViPham}
+            setIsTurnOffCam={setIsTurnOffCam}
+          />
         </div>
         <div className={classes.camera}>
-          <CameraDetection />
+          <CameraDetection
+            setLoiViPham={setLoiViPham}
+            isTurnOffCam={isTurnOffCam}
+          />
         </div>
       </div>
     </div>

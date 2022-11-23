@@ -1,5 +1,5 @@
 body {
-    background: #F7F7F7;
+    /* background: red; */
     display: grid;
     font: 87.5%/1.5em 'Lato', sans-serif;
     margin-top: 125px;
@@ -10,6 +10,7 @@ body {
   .container {
     margin-top: 20px;
     width: 1200px;
+
   }
 
   table {

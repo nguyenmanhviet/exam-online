@@ -1,16 +1,39 @@
 import ReactDOM from "react-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import AuthContext from "../../store/authContext";
 
 import classes from "./ModalDetailClassSubject.module.css";
 
 const ModalDetailClassSubject = (props) => {
+  const [results, setResults] = useState([]);
   const authCtx = useContext(AuthContext);
   const exitLogin = (event) => {
     event.preventDefault();
     props.onExitDetailClassSubject();
   };
+
+  useEffect(() => {
+    let headers = new Headers();
+
+    headers.append("Content-Type", "application/json");
+    headers.append("Accept", "application/json");
+
+    headers.append("Access-Control-Allow-Origin", "http://3.105.183.164:3001");
+    headers.append("Access-Control-Allow-Credentials", "true");
+    fetch(
+      `http://3.105.183.164:3001/student/${authCtx.id}/exam/${props.classSubject.id}/result`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setResults(data.items);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return ReactDOM.createPortal(
     <div className={classes.modal}>
@@ -62,64 +85,30 @@ const ModalDetailClassSubject = (props) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className={classes.lalign}>Công nghệ phần mềm</td>
-                  <td>Thi cuối kỳ 2 (2020-2021) Công nghệ phần mềm</td>
-                  <td>2020-2021</td>
-                  <td>Học kỳ 2</td>
-                  <td>18Nh11A</td>
-                  <td>13:02 11/08/2021</td>
-                  <td>13:41 11/08/2021</td>
-                  <td>60</td>
-                  <td>49</td>
-                  <td>0</td>
-                </tr>
+                {results &&
+                  results.map((kq) => (
+                    <tr>
+                      <td className={classes.lalign}>{kq.hocPhan.hocPhan}</td>
+                      <td>{kq.kyThi.kyThi}</td>
+                      <td>{kq.namHoc.namHoc}</td>
+                      <td>{kq.hocKy.hocKy}</td>
+                      <td>{kq.lopHocPhan.tenLop}</td>
+                      <td>{kq.timeStart}</td>
+                      <td>{kq.timeEnd}</td>
+                      <td>{kq.tongSoCauHoi}</td>
+                      <td>{kq.soCauDung}</td>
+                      <td>{kq.soLanViPham}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
 
-          <p className={classes.headera}>Bài tập đã làm</p>
-          <div className={classes.wrapper}>
-            <table
-              className={classes.keywords}
-              cellspacing="1"
-              cellpadding="3"
-              color="#7C95AC"
-            >
-              <thead>
-                <tr>
-                  <th>
-                    <span>Bài tập</span>
-                  </th>
-                  <th>
-                    <span>Học phần</span>
-                  </th>
-                  <th>
-                    <span>Chương</span>
-                  </th>
-                  <th>
-                    <span>Thời gian nhận bài</span>
-                  </th>
-                  <th>
-                    <span>Thời gian nộp bài</span>
-                  </th>
-                  <th>
-                    <span>Đề bài</span>
-                  </th>
-                  <th>
-                    <span>Bài làm</span>
-                  </th>
-                  <th>
-                    <span>Điểm</span>
-                  </th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-          
           <div className={classes.actions}>
             <div className={classes.btnHolder}>
-              <button type="button"  onClick={exitLogin}>Thoát</button>
+              <button type="button" onClick={exitLogin}>
+                Thoát
+              </button>
             </div>
           </div>
         </div>

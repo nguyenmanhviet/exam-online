@@ -1,15 +1,44 @@
 import ReactDOM from "react-dom";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 
 import AuthContext from "../../store/authContext";
 
 import classes from "./ModalAddSubject.module.css";
 
 const ModalAddSubject = (props) => {
+  const subjectNameInputRef = useRef();
+  const subjectCodeInputRef = useRef();
+
   const authCtx = useContext(AuthContext);
   const exitLogin = (event) => {
     event.preventDefault();
     props.onExitModalAddSubject();
+  };
+
+  const submitHandlee = (event) => {
+    event.preventDefault();
+
+    const subjectName = subjectNameInputRef.current.value;
+    const subjectCode = subjectCodeInputRef.current.value;
+
+    fetch("http://3.105.183.164:3001/addSubject", {
+      method: "POST",
+      body: JSON.stringify({
+        subjectName: subjectName,
+        subjectCode: subjectCode,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        event.preventDefault();
+        props.onExitModalAddSubject();
+        window.location.reload(false);
+      });
   };
 
   return ReactDOM.createPortal(
@@ -22,16 +51,26 @@ const ModalAddSubject = (props) => {
             <form>
               <div className={classes.searching}>
                 <div className={classes.control}>
-                  <label htmlFor="username">Tên học phần: *</label>
-                  <input type="text" placeholder="Học phần" />
+                  <label>Tên học phần: *</label>
+                  <input
+                    type="text"
+                    placeholder="Học phần"
+                    ref={subjectNameInputRef}
+                  />
                 </div>
                 <div className={classes.control}>
-                  <label htmlFor="username">Mã học phần: *</label>
-                  <input type="text" placeholder="Mã học phần" />
+                  <label>Mã học phần: *</label>
+                  <input
+                    type="text"
+                    placeholder="Mã học phần"
+                    ref={subjectCodeInputRef}
+                  />
                 </div>
               </div>
               <div className={classes.add}>
-                <button className="btn">Thêm mới học phần</button>
+                <button className="btn" onClick={submitHandlee}>
+                  Thêm mới học phần
+                </button>
               </div>
             </form>
           </div>

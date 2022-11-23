@@ -13,7 +13,9 @@ const LoginForm = (props) => {
   const authCtx = useContext(AuthContext);
 
   useEffect(() => {
-    navigate('/home')
+    if (authCtx.isLoggedIn) {
+      navigate("/home");
+    }
   });
 
   const submitHandle = (event) => {
@@ -21,36 +23,59 @@ const LoginForm = (props) => {
 
     const enteredMssv = mssvInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
-    const expirationTime = new Date(new Date().getTime() + 36000000 * 1000);
-    authCtx.login("1", token, expirationTime.toISOString());
-    navigate("/home");
+    console.log(enteredMssv, enteredPassword);
+
+    fetch("http://3.105.183.164:3001/login", {
+      method: "POST",
+      body: JSON.stringify({
+        username: enteredMssv,
+        password: enteredPassword,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        const expirationTime = new Date(new Date().getTime() + 36000000 * 1000);
+        authCtx.login(
+          data.userId,
+          data.role,
+          token,
+          expirationTime.toISOString()
+        );
+        window.location.reload(false);
+        navigate("/home");
+      });
   };
   return (
-    <div className={classes.login}>
-      <div className={classes.loginTriangle}></div>
+    <div>
+      <div className={classes.background}>
+        <div className={classes.shape}></div>
+        <div className={classes.shape}></div>
+      </div>
+      <form className={classes.formLogin}>
+        <h3>Đăng nhập</h3>
 
-      <h2 className={classes.loginHeader}>Log in</h2>
+        <label for="username">Mã số sinh viên/ giảng viên</label>
+        <input
+          type="text"
+          placeholder="Email or Phone"
+          id="username"
+          ref={mssvInputRef}
+        />
 
-      <form className={classes.loginContainer} onSubmit={submitHandle}>
-        <p>
-          <input
-            type="text"
-            placeholder="Mã số sinh viên"
-            required
-            ref={mssvInputRef}
-          />
-        </p>
-        <p>
-          <input
-            type="password"
-            placeholder="Password"
-            required
-            ref={passwordInputRef}
-          />
-        </p>
-        <p>
-          <input type="submit" value="Log in" />
-        </p>
+        <label for="password">Mật khẩu</label>
+        <input
+          type="password"
+          placeholder="Password"
+          id="password"
+          ref={passwordInputRef}
+        />
+
+        <button onClick={submitHandle}>Đăng nhập</button>
       </form>
     </div>
   );

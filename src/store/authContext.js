@@ -9,6 +9,7 @@ const AuthContext = React.createContext({
   login: (token) => {},
   logout: () => {},
   id: "",
+  role: "",
 });
 
 const calculateRemainingTime = (expirationTime) => {
@@ -23,18 +24,24 @@ const calculateRemainingTime = (expirationTime) => {
 const retrieveStoredToken = () => {
   const storedToken = localStorage.getItem("token");
   const storedExpirationDate = localStorage.getItem("expirationTime");
+  const id = localStorage.getItem("id");
+  const role = localStorage.getItem("role");
 
   const remainingTime = calculateRemainingTime(storedExpirationDate);
 
   if (remainingTime <= 3600) {
     localStorage.removeItem("token");
     localStorage.removeItem("expirationTime");
+    localStorage.removeItem("id");
+    localStorage.removeItem("role");
     return null;
   }
 
   return {
     token: storedToken,
     duration: remainingTime,
+    id: id,
+    role: role,
   };
 };
 
@@ -42,12 +49,17 @@ export const AuthContextProvider = (props) => {
   const tokenData = retrieveStoredToken();
 
   let initialToken;
+  let initId;
+  let initRole;
   if (tokenData) {
     initialToken = tokenData.token;
+    initId = tokenData.id;
+    initRole = tokenData.role;
   }
 
   const [token, setToken] = useState(initialToken);
-  const [id, setId] = useState("");
+  const [id, setId] = useState(initId);
+  const [role, setRole] = useState(initRole);
 
   const userIsLoggedIn = !!token;
 
@@ -55,17 +67,22 @@ export const AuthContextProvider = (props) => {
     setToken(null);
     localStorage.removeItem("token");
     localStorage.removeItem("expirationTime");
+    localStorage.removeItem("id");
+    localStorage.removeItem("role");
 
     if (logoutTimer) {
       clearTimeout(logoutTimer);
     }
   }, []);
 
-  const loginHandler = (id, token, expirationTime) => {
+  const loginHandler = (id, role, token, expirationTime) => {
     setToken(token);
     setId(id);
+    setRole(role);
     localStorage.setItem("token", token);
     localStorage.setItem("expirationTime", expirationTime);
+    localStorage.setItem("id", id);
+    localStorage.setItem("role", role);
 
     const remainingTime = calculateRemainingTime(expirationTime);
 
@@ -84,6 +101,7 @@ export const AuthContextProvider = (props) => {
     login: loginHandler,
     logout: logoutHandler,
     id: id,
+    role: role,
   };
 
   return (

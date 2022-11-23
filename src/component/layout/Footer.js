@@ -4,7 +4,7 @@ const Footer = (props) => {
   return (
     <div className={classes.footer}>
       <div className={classes.innerFooter}>
-        <p className={classes.textFooter}>Roomless S.R.L, P.IVA 02547910469</p>
+        <p className={classes.textFooter}>Ứng dụng thi trắc nghiệm online</p>
       </div>
     </div>
   );

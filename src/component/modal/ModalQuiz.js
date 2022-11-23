@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 
 import AuthContext from "../../store/authContext";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import classes from "./ModalQuiz.module.css";
 
 const ModalQuiz = (props) => {
   const authCtx = useContext(AuthContext);
+  const passwordInputRef = useRef();
   const navigate = useNavigate();
   const exitModalQuiz = (event) => {
     event.preventDefault();
@@ -14,8 +15,12 @@ const ModalQuiz = (props) => {
   };
 
   const handleDoQuiz = () => {
-    props.onExitModalQuiz();
-    navigate("/camera-recognition");
+    const enteredPassword = passwordInputRef.current.value;
+
+    if (enteredPassword === props.password) {
+      props.onExitModalQuiz();
+      navigate("/camera-recognition");
+    }
   };
 
   return ReactDOM.createPortal(
@@ -27,7 +32,11 @@ const ModalQuiz = (props) => {
 
           <p className={classes.headera}>Mật khẩu</p>
           <form>
-            <input type="password" className={classes.inputCode}></input>
+            <input
+              type="password"
+              className={classes.inputCode}
+              ref={passwordInputRef}
+            ></input>
 
             <div className={classes.actions}>
               <div className={classes.btnHolder}>

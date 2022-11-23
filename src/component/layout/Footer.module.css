@@ -1,27 +1,28 @@
 .footer {
-    
-    font-size: 16px;
-    line-height: 1.61803em;
-    background-color: #343434;
+    position: fixed;
+    background-color: #354A5E;
     color: #fff;
-    padding: 25px 0;
-    z-index: 10;
+    bottom: 0;
+    z-index: 100;
+    width: 100%;
+    left: 0;
+    padding: 10px 0px;
 }
 
 .innerFooter {
-    padding: 0 70px;
-    margin: 0;
+    width: fit-content;
+    display: inline-block;
+    padding-right: 20px;
+    float: right;
 }
 
 .textFooter {
     display:inline-block;
-    font-size: 18px;
     margin: 0;
 }
 
 .innerFooter span {
     float: right;
-    font-size: 18pt;
     
 }
 

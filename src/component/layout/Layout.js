@@ -1,13 +1,18 @@
-import { Fragment } from 'react';
+import { Fragment } from "react";
+import Footer from "./Footer";
 
-import classes from './Layout.module.css';
-import MainNavigation from './MainNavigation';
+import classes from "./Layout.module.css";
+import MainNavigation from "./MainNavigation";
 
 const Layout = (props) => {
   return (
     <Fragment>
-      <MainNavigation/>
-      <main className={classes.main}>{props.children}</main>
+      {/* <MainNavigation /> */}
+      <main className={classes.main}>
+        <MainNavigation />
+        {props.children}
+      </main>
+      <Footer />
     </Fragment>
   );
 };

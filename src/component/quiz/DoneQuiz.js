@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 const DoneQuiz = (props) => {
   const navigate = useNavigate();
 
+  if (document.exitFullscreen) document.exitFullscreen();
+
   const handleBack = () => {
     navigate("/home");
   };
@@ -58,16 +60,18 @@ const DoneQuiz = (props) => {
               </thead>
               <tbody>
                 <tr>
-                  <td className={classes.lalign}>Công nghệ phần mềm</td>
-                  <td>Thi cuối kỳ 2 (2020-2021) Công nghệ phần mềm</td>
-                  <td>2020-2021</td>
-                  <td>Học kỳ 2</td>
-                  <td>18Nh11A</td>
-                  <td>13:02 11/08/2021</td>
-                  <td>13:41 11/08/2021</td>
-                  <td>60</td>
-                  <td>49</td>
-                  <td>0</td>
+                  <td className={classes.lalign}>
+                    {props.ketQua.hocPhan.hocPhan}
+                  </td>
+                  <td>{props.ketQua.kyThi.kyThi}</td>
+                  <td>{props.ketQua.namHoc.namHoc}</td>
+                  <td>{props.ketQua.hocKy.hocKy}</td>
+                  <td>{props.ketQua.lopHocPhan.tenLop}</td>
+                  <td>{props.ketQua.timeStart}</td>
+                  <td>{props.ketQua.timeEnd}</td>
+                  <td>{props.ketQua.tongSoCauHoi}</td>
+                  <td>{props.ketQua.soCauDung}</td>
+                  <td>{props.ketQua.soLanViPham}</td>
                 </tr>
               </tbody>
             </table>
